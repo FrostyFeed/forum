@@ -1,0 +1,185 @@
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #6200ee;
+    --accent-hover: #7c4dff;
+    --border: #333333;
+    --error: #cf6679;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.mainContent {
+    padding: 40px 0;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Form Styling */
+.authContainer {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border);
+    margin: 0 auto;
+}
+
+.formTitle {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.formControl {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.formControl:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.forgotPassword {
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--accent);
+}
+
+.forgotPassword:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+}
+
+.btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.rememberMe {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.rememberMe input {
+    margin-right: 10px;
+}
+
+.formFooter {
+    margin-top: 25px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.formFooter a {
+    color: var(--accent);
+}
+
+.formFooter a:hover {
+    text-decoration: underline;
+}
+
+.centerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 170px);
+}
+
+.passwordContainer {
+    position: relative;
+}
+
+.togglePassword {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 8px;
+    transition: color 0.3s;
+}
+
+.togglePassword:hover {
+    color: var(--accent);
+}
+
+.togglePassword:focus {
+    outline: none;
+}

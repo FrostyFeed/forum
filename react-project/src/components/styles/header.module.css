@@ -1,0 +1,63 @@
+.header {
+    background-color: var(--bg-secondary);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+}
+
+.navMenu li {
+    margin-left: 20px;
+}
+
+.navMenu a {
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.navMenu a:hover {
+    background-color: var(--bg-tertiary);
+}
+
+.loginArea {
+    display: flex;
+    align-items: center;
+}
+
+.loginArea a {
+    margin-left: 15px;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.loginBtn {
+    background-color: var(--bg-tertiary);
+}
+
+.registerBtn {
+    background-color: var(--accent);
+}
+
+.registerBtn:hover {
+    background-color: var(--accent-hover);
+}

@@ -1,0 +1,26 @@
+.footer {
+    background-color: var(--bg-secondary);
+    padding: 25px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+}
+
+.footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerLinks {
+    display: flex;
+    list-style: none;
+}
+
+.footerLinks li {
+    margin-right: 20px;
+}
+
+.copyright {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
