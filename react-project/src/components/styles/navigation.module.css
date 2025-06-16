@@ -1,0 +1,76 @@
+/* --- Pagination Container (No change needed) --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 5px;
+}
+
+/* --- Base Pagination Button Styles --- */
+.pagination button {
+    /* Original styles ported from 'a' */
+    padding: 8px 15px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    /* --- Button Specific Styles & Resets --- */
+    font: inherit;
+    /* Ensure buttons inherit font styles */
+    color: inherit;
+    /* Ensure buttons inherit text color */
+    cursor: pointer;
+    /* Make it clear it's clickable */
+    text-align: center;
+    /* Ensure text is centered */
+    /* appearance: none; /* Optional: Remove native OS styling */
+}
+
+/* --- Hover State for Standard Buttons --- */
+.pagination button:hover {
+    background-color: var(--bg-tertiary);
+}
+
+/* --- Active/Current Button Styles --- */
+.pagination button.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    /* color: #fff; /* Optional: Consider changing text color for contrast */
+}
+
+/* --- Hover State for the Active Button --- */
+/* Note: You might want the active button's hover to be distinct */
+/* or perhaps even disable hover effects if the button is also disabled */
+.pagination button.active:hover {
+    background-color: var(--accent-hover);
+    /* Also consider changing the border color on hover for consistency */
+    border-color: var(--accent-hover);
+}
+
+/* --- Optional: Styles for Disabled Buttons --- */
+.pagination button:disabled {
+    background-color: var(--bg-disabled, #e0e0e0);
+    /* Provide a fallback */
+    border-color: var(--border-disabled, #cccccc);
+    /* Provide a fallback */
+    color: var(--text-disabled, #a0a0a0);
+    /* Provide a fallback */
+    cursor: not-allowed;
+    /* Indicate non-interactive state */
+}
+
+.pagination button:disabled:hover {
+    /* Prevent hover styles on disabled buttons */
+    background-color: var(--bg-disabled, #e0e0e0);
+    border-color: var(--border-disabled, #cccccc);
+}
+
+
+/* --- Optional: Accessibility Focus Styles --- */
+/* Good practice if you ever disable default outlines */
+.pagination button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}

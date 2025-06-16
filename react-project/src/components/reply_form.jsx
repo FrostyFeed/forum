@@ -1,102 +1,127 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
-import formStyles from './styles/reply_form.module.css'; // Adjust path if needed
-import { useAuth } from '../context/AuthContext.jsx'; // Import Auth context
-import { useThread } from '../context/ThreadContext.jsx'; // Import Thread context
+import formStyles from './styles/reply_form.module.css';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useThread } from '../context/ThreadContext.jsx';
 import { is } from 'date-fns/locale';
 import { add } from 'date-fns';
-// --- Constants for Quill ---
+import ImageResize from 'quill-image-resize-module-react';
+
+// 2. Register it with Quill's core
+Quill.register('modules/imageResize', ImageResize);
 const modules = {
     toolbar: [
         ['bold', 'italic', 'underline'],
         [{ 'align': ['', 'center', 'right', 'justify'] }],
         ['link', 'image'],
     ],
+    imageResize: {
+        parchment: Quill.import('parchment'),
+        modules: ['Resize', 'DisplaySize', 'Toolbar'],
+        displayStyles: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            border: 'none',
+            color: 'white',
+        }
+    }
 };
 
 const formats = [
     'bold', 'italic', 'underline',
     'align',
-    'link', 'image'
+    'link', 'image', 'width', 'height', 'style'
+
 ];
 
-// --- Constants for File Upload ---
 const MAX_FILE_SIZE_MB = 5;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 async function deleteImageFromServer(imageUrl) {
-    console.log(`Requesting deletion for image: ${imageUrl}`);
     try {
-        const filename = imageUrl.substring(imageUrl.lastIndexOf('/') + 1).split('?')[0];
+        const filename = imageUrl;
         if (!filename) {
-            console.warn("Could not extract filename for deletion from URL:", imageUrl);
-            return; // Or throw, depending on how critical this is
+            return;
         }
-        const response = await axios.delete(`http://localhost:8080/api/img/deleteByName/${filename}`, {
+        const response = await axios.delete(`http://localhost:8080/api/img?url=${filename}`, {
             withCredentials: true,
         });
         if (response.status >= 200 && response.status < 300) {
-            console.log(`Successfully requested deletion for image: ${imageUrl}`);
             return response.data;
         } else {
             const errorMsg = response.data?.message || `Image deletion failed for ${imageUrl} with status: ${response.status}`;
-            console.error("Image Deletion Response Error:", response);
-            // Not throwing here to prevent post update failure due to deletion error
-            // throw new Error(errorMsg); 
         }
     } catch (error) {
         console.error(`Axios error during image deletion for ${imageUrl}:`, error);
-        // Not throwing here
-        // throw new Error(error.message || `Image deletion failed for ${imageUrl}`);
     }
 }
-// --- Helper Function for File Upload ---
 async function uploadFile(file) {
-    console.log(`Simulating upload for: ${file.name}`);
     const formData = new FormData();
     formData.append('imageFile', file);
     try {
         const response = await axios.post('http://localhost:8080/api/img', formData, {
             withCredentials: true,
         });
-        // Check for successful status code (e.g., 200, 201)
         if (response.status >= 200 && response.status < 300 && response.data?.imageUrl) {
             return response.data.imageUrl;
         } else {
-            // Throw an error with more context if possible
             const errorMsg = response.data?.message || `Image upload failed with status: ${response.status}`;
             console.error("Upload Response Error:", response);
             throw new Error(errorMsg);
         }
     } catch (error) {
         console.error("Axios Upload Error:", error);
-        // Re-throw a more specific error or handle it
         throw new Error(error.message || 'Image upload failed');
     }
 }
 
 
-export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onCancel, threadId, redactedPost, isThread, addReply }) {
+export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onCancel, threadId, redactedPost, isThread, addReply, addNews }) {
     const threadContext = useThread();
     const threadContent = threadContext?.content;
-    const [title, setTitle] = useState(isThread ? threadContent.tittle : ''); // State for thread title
+    const getInitialTitle = () => {
+        if (isThread) {
+            return threadContent?.id ? (threadContent.tittle || '') : '';
+        } else if (formType === 'news') {
+            return redactedPost?.id ? (redactedPost.title || '') : '';
+        }
+        return '';
+    };
+
+    const getInitialContent = () => {
+        if (isThread) {
+            return threadContent?.id ? (threadContent.content || '') : '';
+        }
+        return redactedPost?.id ? (redactedPost.content || '') : '';
+    };
+    const getInitialDescription = () => {
+        if (formType === 'news') {
+            return redactedPost?.id ? (redactedPost.description || '') : '';
+        }
+    }
+    const [title, setTitle] = useState(getInitialTitle());
+    const [content, setContent] = useState(getInitialContent());
+    const [description, setDescription] = useState(getInitialDescription());
     const [pendingFiles, setPendingFiles] = useState(new Map());
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const { user } = useAuth(); // Get user from context
+    const { user, showBanInfo, setShowBanInfo, setBanDetails } = useAuth();
     const isMountedRef = useRef(true);
     const quillRef = useRef(null);
     const fileInputRef = useRef(null);
-    const isRedacting = isThread || !(redactedPost == null && isThread == null)
+    const FIXED_IMAGE_WIDTH = '300';
 
-    const [content, setContent] = useState(
-        isThread
-            ? threadContent?.content ?? ''
-            : redactedPost?.content ?? ''
-    );
-    // --- Cleanup ref on unmount ---
+    const isRedacting = redactedPost != null;
+
+    const isActuallyEditing = useMemo(() => {
+        if (isThread && threadContent?.id) return true;
+        if (!isThread && redactedPost?.id) return true;
+        return false;
+    }, [isThread, threadContent, redactedPost]);
+
+
     useEffect(() => {
         isMountedRef.current = true;
         return () => {
@@ -104,8 +129,6 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
         };
     }, []);
 
-
-    // --- Set up Quill image handler ---
     useEffect(() => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
@@ -117,187 +140,225 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
             });
         }
     }, []);
-
-    // --- Handle File Input ---
     const handleFileInputChange = (event) => {
         const fileInput = event.target;
-
         if (fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
 
-            // File Size Check
             if (file.size > MAX_FILE_SIZE_BYTES) {
-                alert(`File size exceeds the limit of ${MAX_FILE_SIZE_MB}MB.`);
-                fileInput.value = '';
-                return;
+                alert(`File size exceeds limit of ${MAX_FILE_SIZE_MB}MB.`);
+                fileInput.value = ''; return;
             }
-
-            // File Type Check
             const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
             if (!allowedTypes.includes(file.type)) {
-                alert(`Invalid file type. Only PNG, JPEG, JPG, and WEBP are allowed.`);
-                fileInput.value = '';
-                return;
+                alert(`Invalid file type. Only PNG, JPEG, JPG, WEBP allowed.`);
+                fileInput.value = ''; return;
             }
 
             const reader = new FileReader();
-
             reader.onload = (e) => {
-                if (!isMountedRef.current) return; // Check if component is still mounted
+                if (!isMountedRef.current || !quillRef.current || !e.target || typeof e.target.result !== 'string') return;
 
-                if (quillRef.current && e.target && typeof e.target.result === 'string') {
-                    const quill = quillRef.current.getEditor();
-                    const range = quill.getSelection(true);
-                    const base64ImageData = e.target.result;
+                const quill = quillRef.current.getEditor();
+                const range = quill.getSelection(true);
+                const base64ImageData = e.target.result;
 
-                    if (!base64ImageData.startsWith('data:image/')) {
-                        console.error("FileReader result is not a valid data URL");
-                        alert("Error processing the image data.");
-                        return;
-                    }
+                if (!base64ImageData.startsWith('data:image/')) {
+                    console.error("FileReader result not valid data URL");
+                    alert("Error processing image data."); return;
+                }
 
-                    try {
-                        setPendingFiles(prevMap => new Map(prevMap).set(base64ImageData, file));
-                        quill.insertEmbed(range.index, 'image', base64ImageData);
-                        // Move cursor past the inserted image
-                        const range2 = quill.getSelection();
-                        if (range2) {
-                            quill.focus();
-                            setTimeout(() => {
-                                quill.setSelection(range2.index + 1, 0);
-                            }, 0);
-                        }
-                    } catch (mapError) {
-                        console.error("Error updating pendingFiles map:", mapError);
-                        alert("An internal error occurred while preparing the image.");
-                    }
-                } else if (isMountedRef.current) {
-                    console.warn("FileReader onload fired, but Quill ref or event target/result was invalid.");
-                    alert("Could not insert the image due to an unexpected issue.");
+                try {
+                    setPendingFiles(prevMap => new Map(prevMap).set(base64ImageData, file));
+
+                    quill.insertEmbed(range.index, 'image', base64ImageData);
+
+
+                    quill.setSelection(range.index + 1, 0);
+                    quill.focus();
+
+
+                } catch (mapError) {
+                    console.error("Error updating pendingFiles map:", mapError);
+                    alert("Internal error preparing image.");
                 }
             };
 
-            reader.onerror = (error) => {
+            reader.onerror = (err) => {
                 if (isMountedRef.current) {
-                    console.error("Error reading file:", error);
-                    alert("There was an error reading the selected file.");
+                    console.error("Error reading file:", err);
+                    alert("Error reading selected file.");
                 }
             };
 
             reader.readAsDataURL(file);
         }
-        if (fileInput) {
-            fileInput.value = '';
-        }
     };
 
-
-    // --- Handle Form Submission ---
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
 
         const editor = quillRef.current?.getEditor();
         const textContent = editor ? editor.getText().trim() : '';
-        const htmlContent = editor ? editor.root.innerHTML : content;
+        const currentRawHtmlContent = editor ? editor.root.innerHTML : content;
 
         if (formType === 'thread' && !title.trim()) {
-            setError("Thread title cannot be empty.");
-            return;
+            setError("Назва посту не може бути порожньою."); return;
         }
-        if (!textContent && !htmlContent.includes('<img')) {
-            const message = formType === 'thread' ? "Thread content" : "Reply content";
-            setError(`${message} cannot be empty.`);
-            return;
+        if (!textContent && !currentRawHtmlContent.includes('<img')) {
+            setError(`${formType === 'thread' ? "Пост" : "Відповідь"} вміст не можу бути порожнім.`); return;
         }
 
         setIsSubmitting(true);
-        let finalContent = htmlContent; // Use HTML content from editor
+        let finalSubmitContent = currentRawHtmlContent;
+
+        let originalPersistedImageUrls = new Set();
+        if (isActuallyEditing) {
+            const originalHtml = isThread ? threadContent?.content : redactedPost?.content;
+            if (originalHtml) {
+                const imgTagRegex = /<img src="([^"]+)"/g;
+                let match;
+                while ((match = imgTagRegex.exec(originalHtml)) !== null) {
+                    const src = match[1];
+                    if (!src.startsWith('data:image/')) {
+                        originalPersistedImageUrls.add(src);
+                    }
+                }
+            }
+        }
 
         try {
             const base64ImageRegex = /<img src="(data:image\/[^;]+;base64,[^"]+)"/g;
             const imagesToUpload = new Map();
-            let match;
 
-            while ((match = base64ImageRegex.exec(finalContent)) !== null) {
-                const base64Src = match[1];
-                if (pendingFiles.has(base64Src) && !imagesToUpload.has(base64Src)) {
+            let tempContentForScan = finalSubmitContent;
+            let uploadMatch;
+            while ((uploadMatch = base64ImageRegex.exec(tempContentForScan)) !== null) {
+                const base64Src = uploadMatch[1];
+                if (pendingFiles.has(base64Src)) {
                     imagesToUpload.set(base64Src, pendingFiles.get(base64Src));
-                    console.log(`Found image to upload: ${base64Src}`);
                 }
             }
 
             if (imagesToUpload.size > 0) {
-                console.log(`Found ${imagesToUpload.size} unique images to upload.`);
+                console.log(`Uploading ${imagesToUpload.size} new images.`);
                 const uploadPromises = [];
-                const uploadedUrls = new Map();
+                const uploadedUrlMap = new Map();
+
                 for (const [base64Src, file] of imagesToUpload.entries()) {
                     uploadPromises.push(
                         uploadFile(file)
-                            .then(cloudUrl => uploadedUrls.set(base64Src, cloudUrl))
+                            .then(cloudUrl => {
+                                if (!cloudUrl) throw new Error(`Upload for ${file.name} did not return a URL.`);
+                                uploadedUrlMap.set(base64Src, cloudUrl);
+                            })
                             .catch(uploadError => {
-                                console.error(`Failed to upload image: ${file.name}`, uploadError);
-                                throw new Error(`Failed to upload image: ${file.name}. ${uploadError.message}`);
+                                throw new Error(`Image upload failed for ${file.name}: ${uploadError.message}`);
                             })
                     );
                 }
                 await Promise.all(uploadPromises);
 
-                finalContent = finalContent.replace(base64ImageRegex, (fullMatch, base64Src) => {
-                    return uploadedUrls.has(base64Src) ? `<img src="${uploadedUrls.get(base64Src)}"` : fullMatch;
+                finalSubmitContent = finalSubmitContent.replace(base64ImageRegex, (fullMatch, base64Src) => {
+                    if (uploadedUrlMap.has(base64Src)) {
+                        return `<img src="${uploadedUrlMap.get(base64Src)}"`;
+                    }
+                    return fullMatch;
                 });
             }
 
+            if (isActuallyEditing && originalPersistedImageUrls.size > 0) {
+                const currentPersistedImageUrlsInEditor = new Set();
+                const imgTagRegex = /<img src="([^"]+)"/g;
+                let currentContentMatch;
+                while ((currentContentMatch = imgTagRegex.exec(finalSubmitContent)) !== null) {
+                    const src = currentContentMatch[1];
+                    if (!src.startsWith('data:image/')) {
+                        currentPersistedImageUrlsInEditor.add(src);
+                    }
+                }
 
-            // --- API Call based on formType ---
+                const urlsToDelete = [];
+                for (const originalUrl of originalPersistedImageUrls) {
+                    if (!currentPersistedImageUrlsInEditor.has(originalUrl)) {
+                        urlsToDelete.push(originalUrl);
+                    }
+                }
+
+                if (urlsToDelete.length > 0) {
+                    console.log("Requesting deletion for images:", urlsToDelete);
+                    const deletePromises = urlsToDelete.map(url =>
+                        deleteImageFromServer(url)
+                            .catch(err => console.error(`Deletion failed for ${url} (ignored):`, err.message))
+                    );
+                    await Promise.all(deletePromises);
+                }
+            }
+
             let response;
-            let payload = { content: finalContent, userId: user.id, creationDate: new Date().toISOString() }; // Assuming user.id is available
+            let payload = {
+                content: finalSubmitContent,
+                userId: user.id,
+                creationDate: new Date().toISOString()
+            };
             let endpoint = '';
 
             if (formType === 'thread') {
                 payload.title = title.trim();
-                payload.topicId = parentId; // Pass topicId for thread creation
-                endpoint = 'http://localhost:8080/api/thread'; // Endpoint for creating a thread
-                console.log("Submitting new thread:", payload);
-            } else { // 'reply'
-                payload = { ...payload, threadId: threadId }; // Use threadId for reply creation
-                endpoint = 'http://localhost:8080/api/reply'; // Endpoint for creating a reply
-                console.log("Submitting reply:", payload);
+                payload.topicId = parentId;
+                endpoint = 'http://localhost:8080/api/thread';
+            } else if (formType === 'news') {
+                payload.description = description.trim();
+                payload.title = title.trim();
+                endpoint = 'http://localhost:8080/api/news';
+            }
+            else { // 'reply'
+                payload.threadId = threadId;
+                endpoint = 'http://localhost:8080/api/reply';
+                delete payload.title;
             }
 
             if (isRedacting) {
-                console.log('is reacting' + isRedacting)
-                payload.id = isThread ? threadContent.id : redactedPost.id;
-                payload.tittle = isThread ? title : '';
-                console.log("new tittle " + payload.tittle);
+                if (isThread && threadContent?.id) {
+                    payload.id = threadContent.id;
+                } else if (!isThread && redactedPost?.id) {
+                    payload.id = redactedPost.id;
+                }
+
+
                 response = await axios.put(endpoint, payload, {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 });
-                console.log("endpoint : " + endpoint)
             } else {
                 response = await axios.post(endpoint, payload, {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 });
-                console.log("twice")
-
-                console.log(response.data)
-                addReply(response.data);
+                if (addReply) addReply(response.data); // User's call
+                if (addNews) addNews(payload, response.data);
             }
-            console.log(`${formType === 'thread' ? 'Thread' : 'Reply'} posted successfully!`, response.data);
 
-            setTitle('');
-            setContent('');
-            if (editor) editor.setText('');
+
+            setTitle(getInitialTitle());
+            setContent(isActuallyEditing ? getInitialContent() : '');
+
             setPendingFiles(new Map());
             setError(null);
-            if (onSuccess) {
-                console.log(response.data)
-                onSuccess(response.data); // Pass created data back if needed
+            if (onSuccess && !addNews) {
+                onSuccess(response.data);
+                onCancel?.();
             }
+
         } catch (submitError) {
-            console.error(`Failed to submit ${formType}:`, submitError);
+            console.log(submitError);
+            if (submitError.response.data.errorCode === "USER_BANNED") {
+                console.log("test")
+                setBanDetails(submitError.response.data);
+                setShowBanInfo(true);
+                return
+            }
             const errorMsg = submitError.response?.data?.message || submitError.message || "An unexpected error occurred.";
             setError(errorMsg);
         } finally {
@@ -305,25 +366,27 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
                 setIsSubmitting(false);
             }
         }
-    }
-    const formTitle = formType === 'thread' ? "Create New Thread" : "Post a Reply";
-    const submitButtonText = formType === 'thread' ? (isSubmitting ? 'Creating...' : 'Create Thread') : (isSubmitting ? 'Posting...' : 'Post Reply');
-
+    };
+    let formTitle = formType === 'thread' ? "Створити новий пост" : "Відповісти на пост";
+    formTitle = formType === 'news' ? "Створити новину" : formTitle;
+    formTitle = isActuallyEditing ? "Редагувати" : formTitle;
+    let submitButtonText = isSubmitting ? 'Створюється...' : 'Створити'
+    submitButtonText = isActuallyEditing ? 'Зберегти' : submitButtonText;
 
     return (
-        <div className={formStyles.postFormContainer}> {/* Example class */}
+        <div className={formStyles.postFormContainer}>
             <h3 className={formStyles.postFormTitle}>{formTitle}</h3>
             {error && <div className={formStyles.errorMessage}>{error}</div>}
             <form onSubmit={handleSubmit}>
-                {formType === 'thread' && isRedacting && (
+                {(formType === 'thread' || formType === 'news') && (
                     <div className={formStyles.formGroup}>
-                        <label htmlFor="threadTitle" className={formStyles.label}>Title</label>
+                        <label htmlFor="threadTitle" className={formStyles.label}>Заголовок</label>
                         <input
                             type="text"
                             id="threadTitle"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Enter thread title"
+                            placeholder="Введіть заголовок"
                             required
                             maxLength={100}
                             className={formStyles.titleInput}
@@ -331,9 +394,26 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
                         />
                     </div>
                 )}
-
+                {formType === 'news' && (
+                    <div className={formStyles.formGroup}>
+                        <label htmlFor="description" className={formStyles.label}>Опис (для попереднього перегляду)</label>
+                        <textarea
+                            className={formStyles.descriptionTextarea}
+                            id="description"
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value)
+                                if (error && e.target.value.trim()) setError("");
+                            }}
+                            rows="3"
+                            required
+                            maxLength={300}
+                            placeholder="Введіть короткий опис або зведення"
+                            disabled={isSubmitting}
+                        />
+                    </div>
+                )}
                 <div className={formStyles.quillContainer}>
-                    <label className={formStyles.label}>Content</label>
                     <ReactQuill
                         ref={quillRef}
                         theme="snow"
@@ -341,7 +421,6 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
                         onChange={setContent}
                         modules={modules}
                         formats={formats}
-                        placeholder={formType === 'thread' ? "Write the main post for your thread..." : "Write your reply here..."}
                         className={formStyles.replyQuillEditor}
                     />
                 </div>
@@ -363,7 +442,7 @@ export default function ReplyForm({ formType = 'reply', parentId, onSuccess, onC
                             onClick={onCancel}
                             disabled={isSubmitting}
                         >
-                            Cancel
+                            Скасувати
                         </button>
                     )}
                     <button type="submit" className={formStyles.submitBtn} disabled={isSubmitting}>

@@ -1,0 +1,35 @@
+.scrollToTopButton {
+    position: fixed;
+    /* Remove bottom property */
+    /* bottom: 30px; */
+    top: 50%;
+    /* Position the top edge at the middle */
+    transform: translateY(-50%);
+    /* Shift upward by half its height */
+    right: 30px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    line-height: 50px;
+    /* Keep for vertical text alignment */
+    text-align: center;
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0.8;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    /* Added transform to transition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.scrollToTopButton:hover {
+    background-color: #333;
+    opacity: 1;
+}
+
+.scrollToTopButton:active {
+    background-color: #000;
+}

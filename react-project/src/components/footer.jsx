@@ -5,13 +5,8 @@ export default function Footer() {
         <footer className={styles.footer}>
             <div className={`${globalStyles.container} ${styles.footerContent}`}>
                 <ul className={styles.footerLinks}>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">FAQ</a></li>
                 </ul>
-                <div className={styles.copyright}>© 2025 DarkForum. All rights reserved.</div>
+                <div className={styles.copyright}>© 2025 DarkForum. Всі права захищені.</div>
             </div>
         </footer>
     )

@@ -1,0 +1,108 @@
+/* UserBanInfo.module.css */
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #6200ee;
+    --accent-hover: #7c4dff;
+    --border: #333;
+}
+
+/* UserBanInfo.module.css */
+/* ... (keep existing styles and :root variables) ... */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(18, 18, 18, 0.85);
+    /* Using --bg-primary with alpha */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.banInfoCard {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+    max-width: 500px;
+    width: 100%;
+    text-align: left;
+    /* position: relative; /* No longer needed if no absolute positioned children */
+}
+
+/* REMOVED: .closeButton styles */
+
+.banHeader {
+    color: var(--accent);
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 15px;
+    /* padding-right: 30px; /* Removed if it was only for the X button */
+}
+
+.infoItem {
+    margin-bottom: 15px;
+}
+
+.infoLabel {
+    display: block;
+    color: var(--text-secondary);
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.infoValue {
+    color: var(--text-primary);
+    font-size: 1rem;
+    word-wrap: break-word;
+}
+
+.appealLink {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.appealLink:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+.acknowledgeButton {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin-top: 25px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.acknowledgeButton:hover {
+    background-color: var(--accent-hover);
+}
+
+.acknowledgeButton:focus {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 2px;
+}

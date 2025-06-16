@@ -14,3 +14,14 @@
 .main-content {
     padding: 30px 0;
 }
+
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #6200ee;
+    --accent-hover: #7c4dff;
+    --border: #333;
+}

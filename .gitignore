@@ -1,0 +1,27 @@
+
+node_modules/
+
+
+build/
+dist/
+out/
+target/
+
+
+*.log
+
+
+.DS_Store
+Thumbs.db
+
+
+.idea/
+*.iml
+.vscode/
+
+.env
+.env.*  # to catch .env.local, .env.production etc.
+
+
+application.properties
+application-*.yml

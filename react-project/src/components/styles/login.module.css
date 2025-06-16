@@ -8,6 +8,9 @@
     --accent-hover: #7c4dff;
     --border: #333333;
     --error: #cf6679;
+    --success: #03dac6;
+    --warning: #ffb74d;
+    --info: #64b5f6;
 }
 
 * {
@@ -48,6 +51,36 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Message Box Styling */
+.messageBox {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background-color: rgba(207, 102, 121, 0.1);
+    border-left: 4px solid var(--error);
+}
+
+.errorIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    background-color: var(--error);
+    color: var(--text-primary);
+    border-radius: 50%;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.messageBox p {
+    color: var(--error);
+    font-size: 0.9rem;
 }
 
 /* Form Styling */
@@ -182,4 +215,25 @@ a:hover {
 
 .togglePassword:focus {
     outline: none;
+}
+
+.infoMessage {
+    padding: 1rem;
+    /* Approx 16px */
+    margin-bottom: 1.25rem;
+    /* Approx 20px, same as error or adjust as needed */
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+    /* Uses your theme's secondary background */
+    color: var(--text-primary);
+    /* Uses your theme's primary text color */
+    border-left: 5px solid var(--accent);
+    /* Uses your theme's accent color for a side highlight */
+}
+
+.infoMessage p {
+    margin: 0;
+    /* Removes default paragraph margin */
+    line-height: 1.5;
+    /* Improves readability */
 }

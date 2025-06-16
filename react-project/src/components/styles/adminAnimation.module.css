@@ -1,0 +1,44 @@
+@keyframes chromaticPulse {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+        filter: hue-rotate(0deg) drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+    }
+
+    50% {
+        background-position: 100% 50%;
+        filter: hue-rotate(360deg) drop-shadow(0 0 12px rgba(255, 255, 255, 0.7));
+    }
+}
+
+.adminLook {
+    background: linear-gradient(90deg,
+            #ff2525,
+            #ff7325,
+            #f2ff25,
+            #35ff25,
+            #25b0ff,
+            #9925ff,
+            #ff2525);
+
+    background-size: 400% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-weight: 700;
+    transition: filter 0.5s ease;
+}
+
+.adminAnimation {
+    animation: chromaticPulse 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .adminAnimation {
+        animation: none;
+    }
+}

@@ -4,13 +4,25 @@
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 10000;
+    /* Increased z-index just in case, common for headers */
 }
 
 .navContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 20px;
+    /* Assuming globalStyles.container provides max-width and margin: auto */
+    /* Example:
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    */
 }
 
 .logo {
@@ -22,13 +34,25 @@
 .navMenu {
     display: flex;
     list-style: none;
+    padding: 0;
+    /* Reset default ul padding */
+    margin: 0;
+    /* Reset default ul margin */
 }
 
 .navMenu li {
     margin-left: 20px;
 }
 
+.navMenu li:first-child {
+    margin-left: 0;
+    /* Remove margin from the first item if needed */
+}
+
 .navMenu a {
+    color: var(--text-primary);
+    /* Ensure nav links also use text-primary */
+    text-decoration: none;
     padding: 8px 15px;
     border-radius: 4px;
     transition: background-color 0.3s;
@@ -44,20 +68,160 @@
 }
 
 .loginArea a {
+    /* General style for login/register buttons */
     margin-left: 15px;
     padding: 8px 15px;
     border-radius: 4px;
     transition: all 0.3s;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
 .loginBtn {
     background-color: var(--bg-tertiary);
 }
 
+.loginBtn:hover {
+    background-color: var(--bg-primary);
+    /* Example hover for login */
+}
+
 .registerBtn {
     background-color: var(--accent);
+    color: #fff;
+    /* Ensure contrast on accent background */
 }
 
 .registerBtn:hover {
     background-color: var(--accent-hover);
+}
+
+/* --- User Menu and Dropdown (Focus Here) --- */
+
+.userMenu {
+    position: relative;
+    /* Anchor for the absolute positioned dropdown */
+    display: inline-block;
+    /* Or 'flex' if it needs to align internal items differently */
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+    user-select: none;
+}
+
+.userProfile:hover {
+    background-color: var(--bg-tertiary);
+}
+
+.profilePicture {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 0.75rem;
+    background-color: var(--bg-tertiary);
+    flex-shrink: 0;
+}
+
+.profilePicture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.username {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    padding-top: 0.5rem;
+    /* Vertical padding for the container */
+    padding-bottom: 0.5rem;
+    padding-left: 0;
+    /* NO horizontal padding on the dropdown container */
+    padding-right: 0;
+    min-width: 80px;
+    z-index: 1001;
+    list-style: none;
+    margin: 0;
+    /* ... your animation styles ... */
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInDropdown 0.2s forwards ease-out;
+    visibility: hidden;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInDropdown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+
+
+/* Styles for the DIV that has className={styles.dropdownItem} */
+.dropdownItem {
+    display: block;
+    /* Makes the div take full width of .dropdown */
+    width: 100%;
+    box-sizing: border-box;
+    /* Padding is on this DIV, creating space for the link text inside */
+    color: var(--text-primary);
+    /* Default text color, link will inherit */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    cursor: pointer;
+    text-align: left;
+    /* Indicates the whole div area can be interacted with */
+}
+
+/* Hover/focus for the DIV */
+.dropdownItem:hover,
+.dropdownItem:focus-within {
+    /* focus-within applies when the Link inside gets focus */
+    background-color: var(--bg-tertiary);
+    color: var(--accent-hover);
+    /* Link inside will inherit this color on hover */
+}
+
+/* Styles for the Link (<a> tag) INSIDE the .dropdownItem div */
+.dropdownItem>a {
+    /* Targets <a> that is a direct child of .dropdownItem */
+    display: block;
+    /* Makes the link fill the div */
+    width: 100%;
+    /* Makes the link fill the div */
+    color: inherit;
+    /* Crucial: Inherits color from the parent .dropdownItem div (handles hover color change) */
+    text-decoration: none;
+    /* Remove underline */
+    outline: none;
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+    /* Remove focus outline from the link itself if parent handles focus visually */
+}
+
+/* If you want to ensure the Link itself doesn't show an outline when its parent .dropdownItem has focus-within */
+.dropdownItem:focus-within>a:focus {
+    outline: none;
 }

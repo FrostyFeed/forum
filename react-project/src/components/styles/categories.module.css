@@ -1,32 +1,521 @@
 .topicsSection {
-    margin-bottom: 40px;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.topicsSection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.sectionTitleGrow {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+.sectionTitleGrow::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    border-radius: 2px;
+    animation: titleUnderline 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleUnderline {
+    0% {
+        width: 60px;
+        opacity: 0.7;
+    }
+
+    100% {
+        width: 80px;
+        opacity: 1;
+    }
+}
+
+.createButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(98, 0, 238, 0.3);
+}
+
+.createButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.createButton:hover::before {
+    left: 100%;
+}
+
+.createButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(98, 0, 238, 0.4);
+}
+
+.createButton:active {
+    transform: translateY(0);
+}
+
+.plusIcon {
+    width: 18px;
+    height: 18px;
+    position: relative;
+}
+
+.plusIcon::before,
+.plusIcon::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 1px;
+}
+
+.plusIcon::before {
+    width: 18px;
+    height: 2px;
+    top: 8px;
+    left: 0;
+}
+
+.plusIcon::after {
+    width: 2px;
+    height: 18px;
+    top: 0;
+    left: 8px;
 }
 
 .topicGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
 }
 
 .topicCard {
-    background-color: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 20px;
-    transition: transform 0.3s;
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.topicCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.topicCard:hover::before {
+    transform: scaleX(1);
 }
 
 .topicCard:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+}
+
+.cardActions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.topicCard:hover .cardActions {
+    opacity: 1;
+}
+
+.actionButton {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.editButton {
+    background: rgba(124, 77, 255, 0.2);
+    color: var(--accent-hover);
+}
+
+.deleteButton {
+    background: rgba(244, 67, 54, 0.2);
+    color: #ff5722;
+}
+
+.actionButton:hover {
+    transform: scale(1.1);
 }
 
 .topicCard h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.topicCard h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.topicCard h3 a:hover {
+    color: var(--accent-hover);
+}
+
+.topicCard p {
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
 .topicStats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-top: 15px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Modal Container */
+.modalContainer {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Container */
+.modalContainer {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Container */
+.modalContainer {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Close Button */
+.modalCloseButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 28px;
+    font-weight: 300;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.modalCloseButton::before {
+    content: '×';
+    pointer-events: none;
+}
+
+.modalCloseButton:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.modalCloseButton:active {
+    transform: scale(0.95);
+}
+
+/* Modal Heading */
+.modalHeading {
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 32px 0;
+    line-height: 1.3;
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Form Groups */
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Labels */
+.formGroup label {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Input Styling */
+.formInput {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 16px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.formInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.1);
+    background-color: var(--bg-primary);
+}
+
+.formInput:hover:not(:focus) {
+    border-color: var(--text-secondary);
+}
+
+.formTextarea {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-family: inherit;
+    padding: 12px 16px;
+    resize: vertical;
+    min-height: 100px;
+    transition: all 0.3s ease;
+    outline: none;
+    line-height: 1.5;
+}
+
+.formTextarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.1);
+    background-color: var(--bg-primary);
+}
+
+.formTextarea:hover:not(:focus) {
+    border-color: var(--text-secondary);
+}
+
+.formSubmitButton {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.formSubmitButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.formSubmitButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(98, 0, 238, 0.3);
+}
+
+.formSubmitButton:hover::before {
+    left: 100%;
+}
+
+.formSubmitButton:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(98, 0, 238, 0.2);
+}
+
+.formSubmitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.formInput::placeholder,
+.formTextarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.modalCloseButton:focus-visible,
+.formInput:focus-visible,
+.formTextarea:focus-visible,
+.formSubmitButton:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Animation for form elements */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.formGroup {
+    animation: slideInUp 0.4s ease forwards;
+}
+
+.formGroup:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.formGroup:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.formSubmitButton {
+    animation: slideInUp 0.4s ease forwards;
+    animation-delay: 0.3s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .modalHeading {
+        font-size: 20px;
+    }
+
+    .modalCloseButton {
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
+        top: 12px;
+        right: 12px;
+    }
+
+    .formInput,
+    .formTextarea {
+        font-size: 16px;
+    }
 }

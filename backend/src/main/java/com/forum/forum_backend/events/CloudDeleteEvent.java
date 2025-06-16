@@ -1,2 +1,8 @@
-package com.forum.forum_backend.events;public class CloudDeleteEvent {
+package com.forum.forum_backend.events;
+
+import lombok.Data;
+
+@Data
+public class CloudDeleteEvent {
+    private final String content;
 }

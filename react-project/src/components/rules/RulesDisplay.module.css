@@ -1,0 +1,347 @@
+/* RulesDisplay.module.css - Enhanced Version */
+.rulesContainer {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, #1a1a1a 100%);
+    color: var(--text-primary);
+    padding: 32px;
+    border-radius: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    max-width: 900px;
+    margin: 24px auto;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.rulesContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.6;
+}
+
+.rulesContainer h2 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 32px 0;
+    padding: 0 0 16px 0;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rulesContainer h2::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    border-radius: 1px;
+}
+
+.addNewButton {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: var(--text-primary);
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow:
+        0 4px 12px rgba(98, 0, 238, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.addNewButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.addNewButton:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 20px rgba(98, 0, 238, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.addNewButton:hover::before {
+    left: 100%;
+}
+
+.addNewButton:active {
+    transform: translateY(0);
+}
+
+.rulesList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.ruleItem {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, #252525 100%);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ruleItem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent-hover));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ruleItem:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    border-color: rgba(98, 0, 238, 0.3);
+}
+
+.ruleItem:hover::before {
+    opacity: 1;
+}
+
+.ruleText {
+    flex-grow: 1;
+    margin-right: 20px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.ruleActions {
+    display: flex;
+    gap: 12px;
+}
+
+.ruleActions button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 70px;
+}
+
+.editButton {
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(98, 0, 238, 0.2);
+}
+
+.editButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(98, 0, 238, 0.3);
+}
+
+.deleteButton {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(192, 57, 43, 0.2);
+}
+
+.deleteButton:hover {
+    background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.ruleActions button:active {
+    transform: translateY(0);
+}
+
+/* Empty State Styling */
+.rulesContainer p {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 40px 0;
+    padding: 32px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    font-style: italic;
+}
+
+/* Modal Content Styling */
+.modalContent {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, #353535 100%);
+    padding: 32px;
+    border-radius: 16px;
+    color: var(--text-primary);
+    min-width: 400px;
+    max-width: 600px;
+    box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.modalContent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.8;
+}
+
+.modalContent h3 {
+    margin: 0 0 24px 0;
+    color: var(--text-primary);
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.modalForm textarea {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.modalForm textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.1);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.modalActions button {
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 100px;
+}
+
+.saveButton {
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(98, 0, 238, 0.3);
+}
+
+.saveButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(98, 0, 238, 0.4);
+}
+
+.cancelButton {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cancelButton:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .rulesContainer {
+        margin: 16px;
+        padding: 24px;
+    }
+
+    .ruleItem {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .ruleText {
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+
+    .ruleActions {
+        justify-content: flex-end;
+    }
+
+    .modalContent {
+        min-width: 320px;
+        margin: 16px;
+        padding: 24px;
+    }
+
+    .modalActions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .modalActions button {
+        width: 100%;
+    }
+}

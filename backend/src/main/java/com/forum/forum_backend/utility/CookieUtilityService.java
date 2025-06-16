@@ -3,8 +3,9 @@ package com.forum.forum_backend.utility;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class CookieUtilityService {
     public String extractJwt(HttpServletRequest request) {
         String jwt = null;

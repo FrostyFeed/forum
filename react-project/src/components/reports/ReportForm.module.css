@@ -1,0 +1,106 @@
+/* ... (same CSS as before) ... */
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #6200ee;
+    --accent-hover: #7c4dff;
+    --border: #333;
+    --error-text: #ff6b6b;
+}
+
+.reportFormContainer {
+    background-color: var(--bg-secondary);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.reportFormContainer h2 {
+    /* Descendant selector still works */
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.reportFormField {
+    margin-bottom: 20px;
+}
+
+.reportFormField label {
+    /* Descendant selector */
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Explicit class for the input field */
+.formInput {
+    width: 100%;
+    /* Account for padding */
+    padding: 12px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-hover);
+}
+
+/* Class specifically for the error state of the input */
+.inputError {
+    border-color: var(--error-text) !important;
+    /* Use !important if specificity issues arise, or ensure this rule is specific enough */
+}
+
+.errorMessage {
+    color: var(--error-text);
+    font-size: 0.85rem;
+    margin-top: 6px;
+}
+
+.reportFormButton {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.reportFormButton:hover {
+    background-color: var(--accent-hover);
+}
+
+.reportFormButton:disabled {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+.successMessage {
+    color: var(--accent);
+    /* Or a specific success color */
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 500;
+}

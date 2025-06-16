@@ -1,0 +1,682 @@
+/* Profile Section Enhancements */
+.sectionTitle {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid transparent;
+    background: linear-gradient(90deg, var(--accent), transparent) bottom/60% 2px no-repeat;
+    font-weight: 600;
+    color: var(--text-primary);
+    position: relative;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.sectionTitle::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--gradient-accent);
+    border-radius: 1px;
+    animation: slideInLeft 0.8s ease-out 0.3s both;
+}
+
+/* Profile Container Layout */
+.profileContainer {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 40px;
+    padding: 20px 0;
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Enhanced Profile Sidebar */
+.profileSidebar {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 35px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    height: fit-content;
+    box-shadow: var(--shadow-primary);
+    position: relative;
+    overflow: hidden;
+    animation: slideInLeft 0.8s ease-out;
+}
+
+.profileSidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    opacity: 0.8;
+}
+
+.profileSidebar::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(98, 0, 238, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Enhanced Profile Avatar */
+.profileAvatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    display: block;
+    background: var(--bg-tertiary);
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: zoomIn 0.8s ease-out 0.2s both;
+}
+
+.profileAvatar::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: var(--gradient-accent);
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 10s linear infinite;
+}
+
+.profileAvatar::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(98, 0, 238, 0.2), rgba(124, 77, 255, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profileAvatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 45px rgba(98, 0, 238, 0.4);
+}
+
+.profileAvatar:hover::after {
+    opacity: 1;
+}
+
+.profileAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.profileAvatar:hover img {
+    transform: scale(1.1);
+}
+
+/* Enhanced Profile Username */
+.profileUsername {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Enhanced Profile Stats */
+.profileStats {
+    margin-top: 35px;
+    position: relative;
+    z-index: 1;
+}
+
+.profileStatItem {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out calc(0.6s + var(--delay, 0s)) both;
+}
+
+.profileStatItem:nth-child(1) {
+    --delay: 0.1s;
+}
+
+.profileStatItem:nth-child(2) {
+    --delay: 0.2s;
+}
+
+.profileStatItem:nth-child(3) {
+    --delay: 0.3s;
+}
+
+.profileStatItem:nth-child(4) {
+    --delay: 0.4s;
+}
+
+.profileStatItem:nth-child(5) {
+    --delay: 0.5s;
+}
+
+.profileStatItem::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(98, 0, 238, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.profileStatItem:hover::before {
+    left: 100%;
+}
+
+.profileStatItem:last-child {
+    border-bottom: none;
+}
+
+
+.profileStatLabel {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profileStatValue {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    padding: 6px 12px;
+    background: rgba(98, 0, 238, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(98, 0, 238, 0.2);
+    transition: all 0.3s ease;
+}
+
+.profileStatItem:hover .profileStatValue {
+    background: rgba(98, 0, 238, 0.2);
+    color: var(--accent);
+}
+
+/* Enhanced Profile Actions */
+.profileActions {
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.profileActionBtn {
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-align: center;
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(98, 0, 238, 0.3);
+    color: var(--text-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+}
+
+.profileActionBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(98, 0, 238, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.profileActionBtn:hover {
+    background: rgba(98, 0, 238, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(98, 0, 238, 0.3);
+}
+
+.profileActionBtn:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Profile Content */
+.profileContent {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    animation: slideInRight 0.8s ease-out 0.2s both;
+}
+
+/* Enhanced Activity Section */
+.activitySection {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    box-shadow: var(--shadow-secondary);
+    position: relative;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.activitySection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-accent);
+    opacity: 0.8;
+}
+
+/* Enhanced Activity Header */
+.activityHeader {
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(98, 0, 238, 0.15), rgba(98, 0, 238, 0.05));
+    color: var(--text-primary);
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.activityHeader::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    width: 80px;
+    height: 2px;
+    background: var(--gradient-accent);
+    border-radius: 1px;
+}
+
+/* Enhanced Activity Items */
+.activityItem {
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out calc(0.6s + var(--item-delay, 0s)) both;
+}
+
+.activityItem:nth-child(2) {
+    --item-delay: 0.1s;
+}
+
+.activityItem:nth-child(3) {
+    --item-delay: 0.2s;
+}
+
+.activityItem:nth-child(4) {
+    --item-delay: 0.3s;
+}
+
+.activityItem:nth-child(5) {
+    --item-delay: 0.4s;
+}
+
+.activityItem::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(98, 0, 238, 0.08), transparent);
+    transition: left 0.6s ease;
+}
+
+.activityItem:hover::before {
+    left: 100%;
+}
+
+.activityItem:last-child {
+    border-bottom: none;
+}
+
+.activityItem:hover {
+    background: rgba(98, 0, 238, 0.05);
+    transform: translateX(8px);
+    box-shadow: inset 4px 0 0 var(--accent);
+}
+
+/* Enhanced Activity Type */
+.activityType {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+}
+
+.activityType a {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.activityType a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.activityType a:hover::after {
+    width: 100%;
+}
+
+.activityType a:hover {
+    color: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+/* Enhanced Activity Content */
+.activityContent {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.activityContent p {
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.activityItem:hover .activityContent p {
+    color: var(--text-primary);
+}
+
+/* Enhanced Activity Meta */
+.activityMeta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-weight: 500;
+}
+
+.activityMeta span {
+    padding: 4px 10px;
+    background: rgba(98, 0, 238, 0.1);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(98, 0, 238, 0.2);
+    transition: all 0.3s ease;
+}
+
+.activityMeta a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: rgba(98, 0, 238, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(98, 0, 238, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.activityMeta a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(98, 0, 238, 0.2), transparent);
+    transition: left 0.4s;
+}
+
+.activityMeta a:hover {
+    color: var(--accent-hover);
+    background: rgba(98, 0, 238, 0.2);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.activityMeta a:hover::before {
+    left: 100%;
+}
+
+.activityItem:hover .activityMeta span {
+    background: rgba(98, 0, 238, 0.15);
+    border-color: rgba(98, 0, 238, 0.3);
+}
+
+/* === Enhanced Animations === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+}
+
+/* === Responsive Design === */
+@media (max-width: 1024px) {
+    .profileContainer {
+        grid-template-columns: 320px 1fr;
+        gap: 30px;
+    }
+
+    .profileSidebar {
+        padding: 30px 25px;
+    }
+
+    .profileAvatar {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profileContainer {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .profileSidebar {
+        position: static;
+        padding: 25px 20px;
+        border-radius: 16px;
+    }
+
+    .profileAvatar {
+        width: 140px;
+        height: 140px;
+    }
+
+    .profileUsername {
+        font-size: 2rem;
+    }
+
+    .activitySection {
+        border-radius: 16px;
+    }
+
+    .activityHeader,
+    .activityItem {
+        padding: 20px 25px;
+    }
+
+    .activityHeader {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profileSidebar {
+        padding: 20px 15px;
+    }
+
+    .profileAvatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profileUsername {
+        font-size: 1.8rem;
+    }
+
+    .profileStatItem {
+        padding: 15px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .profileStatValue {
+        align-self: flex-end;
+    }
+
+    .activityHeader,
+    .activityItem {
+        padding: 15px 20px;
+    }
+
+    .activityMeta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .sectionTitle {
+        font-size: 1.6rem;
+    }
+}
